@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="8dp">
+
+    <TextView
+        android:id="@+id/monthText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="1회차"
+        android:layout_weight="1"/>
+
+    <TextView
+        android:id="@+id/paymentText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="1,900,000원"
+        android:layout_weight="1"/>
+
+    <TextView
+        android:id="@+id/principalText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="1,500,000원"
+        android:layout_weight="1"/>
+
+    <TextView
+        android:id="@+id/interestText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="400,000원"
+        android:layout_weight="1"/>
+
+    <TextView
+        android:id="@+id/balanceText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="98,500,000원"
+        android:layout_weight="1"/>
+</LinearLayout>
