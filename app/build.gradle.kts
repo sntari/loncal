@@ -17,6 +17,13 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.1.1"
+    }
+
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
 
     buildTypes {
         release {
@@ -40,6 +47,12 @@ android {
 }
 
 dependencies {
+    // 뷰페이퍼2
+    implementation("androidx.viewpager2:viewpager2:1.1.0")
+    // 마테리얼3
+    implementation("androidx.compose.material3:material3:1.3.1")
+    implementation("androidx.compose.material3:material3-window-size-class:1.3.1")
+    implementation("androidx.compose.material3:material3-adaptive-navigation-suite:1.4.0-alpha10")
 
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.2")
     implementation("androidx.recyclerview:recyclerview:1.3.1")
