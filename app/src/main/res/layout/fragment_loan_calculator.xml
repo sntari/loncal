@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".LoanCalculatorFragment">
+
+    <TextView
+        android:id="@+id/paytitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="상환 방법"
+        android:textStyle="bold"
+        android:textSize="12sp"
+        android:layout_marginBottom="3dp"
+        app:layout_constraintBottom_toTopOf="@+id/paymentMethodSpinner"
+        app:layout_constraintStart_toStartOf="@id/paymentMethodSpinner"
+        />
+
+
+    <ImageView
+        android:id="@+id/infoIcon"
+        android:layout_width="15dp"
+        android:layout_height="18dp"
+        android:clickable="true"
+        android:layout_marginLeft="3dp"
+        android:contentDescription="상환 방법 설명"
+        android:focusable="true"
+        android:src="@drawable/ic_info"
+        app:layout_constraintBottom_toBottomOf="@+id/paytitle"
+        app:layout_constraintStart_toEndOf="@+id/paytitle" />
+
+    <Spinner
+        android:id="@+id/paymentMethodSpinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintBottom_toTopOf="@+id/principalInput"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/principalInput"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="80dp"
+        android:hint="대출 원금 (원)"
+        android:inputType="numberDecimal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/interestInput"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="대출 금리 (%)"
+        android:inputType="numberDecimal"
+        app:layout_constraintTop_toBottomOf="@id/principalInput"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="12dp"
+        android:layout_marginHorizontal="16dp"/>
+
+    <LinearLayout
+        android:id="@+id/periodLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="12dp"
+        app:layout_constraintTop_toBottomOf="@id/interestInput"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <EditText
+            android:id="@+id/periodInput"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="대출 기간(월)"
+            android:inputType="number"
+            android:layout_marginEnd="8dp"/>
+
+        <EditText
+            android:id="@+id/gracePeriodInput"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="거치 기간(월)"
+            android:inputType="number"
+            android:layout_marginStart="8dp"/>
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/calculateButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="계산하기"
+        app:layout_constraintTop_toBottomOf="@id/periodLayout"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="20dp"
+        android:layout_marginHorizontal="16dp"/>
+
+    <TextView
+        android:id="@+id/resultText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="8dp"
+        android:text=""
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:textAlignment="center"
+        app:layout_constraintTop_toBottomOf="@id/calculateButton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp"
+        android:layout_marginHorizontal="16dp"/>
+
+    <!-- 상단 회차, 총납입금, 원금, 이자, 대출잔액 정보 -->
+    <LinearLayout
+        android:id="@+id/infoLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="8dp"
+        app:layout_constraintTop_toBottomOf="@id/resultText"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:background="@android:color/holo_blue_dark"
+        android:layout_marginTop="14dp">
+
+        <TextView
+            android:id="@+id/roundHeader"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="회차"
+            android:textColor="@color/white"
+            android:layout_weight="0.7"
+            android:gravity="center"/>
+
+        <TextView
+            android:id="@+id/totalPaymentHeader"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="월 납입금"
+            android:textColor="@color/white"
+            android:layout_weight="1"
+            android:gravity="center"/>
+
+        <TextView
+            android:id="@+id/principalHeader"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="납입 원금"
+            android:textColor="@color/white"
+            android:layout_weight="1"
+            android:gravity="center"/>
+
+        <TextView
+            android:id="@+id/interestHeader"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="납입 이자"
+            android:textColor="@color/white"
+            android:layout_weight="1"
+            android:gravity="center"/>
+
+        <TextView
+            android:id="@+id/balanceHeader"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="대출 잔액"
+            android:textColor="@color/white"
+            android:layout_weight="1.3"
+            android:gravity="center"/>
+    </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/scheduleRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/infoLayout" />
+</androidx.constraintlayout.widget.ConstraintLayout>

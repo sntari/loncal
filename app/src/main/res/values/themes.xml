@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="Theme.Lon" parent="Theme.MaterialComponents.Light.DarkActionBar" />
+    <!-- 기본 테마 설정 -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- 상태바 아이콘 색을 어두운 색으로 설정 -->
+        <item name="android:statusBarColor">@android:color/transparent</item> <!-- 상태바 투명 -->
+        <item name="android:windowLightStatusBar">true</item> <!-- 아이콘 색을 어두운 색으로 설정 -->
+    </style>
 </resources>
