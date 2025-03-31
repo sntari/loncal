@@ -7,18 +7,40 @@
     tools:context=".SavingsCalculatorFragment">
 
     <!-- Monthly Deposit Field -->
-    <EditText
-        android:layout_marginTop="16dp"
-        android:id="@+id/monthlyDepositInput"
+    <!-- Monthly Deposit Field -->
+    <LinearLayout
+        android:id="@+id/textLinearLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="월 납입액"
-        android:textAlignment="textEnd"
-        android:inputType="numberDecimal"
+        android:orientation="horizontal"
+        android:layout_marginTop="16dp"
         android:layout_marginHorizontal="16dp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <EditText
+            android:id="@+id/monthlyDepositInput"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="월 납입액"
+            android:textAlignment="textEnd"
+            android:inputType="numberDecimal"
+            android:importantForAccessibility="yes"
+            />
+
+        <!-- "원" Text -->
+        <TextView
+            android:id="@+id/monthlyDepositCurrency"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="원"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_gravity="center_vertical"
+            android:layout_marginEnd="10dp" />
+    </LinearLayout>
 
     <!-- Accumulation Period Field (Year/Month toggle) -->
     <LinearLayout
@@ -28,7 +50,7 @@
         android:orientation="horizontal"
         android:layout_marginHorizontal="16dp"
         android:layout_marginTop="16dp"
-        app:layout_constraintTop_toBottomOf="@id/monthlyDepositInput"
+        app:layout_constraintTop_toBottomOf="@id/textLinearLayout"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
@@ -69,9 +91,20 @@
             android:textAlignment="textEnd"
             android:inputType="numberDecimal" />
 
+        <TextView
+            android:id="@+id/percentage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="%"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            android:layout_gravity="center_vertical"
+/>
+
         <RadioGroup
             android:id="@+id/interestTypeGroup"
             android:layout_width="wrap_content"
+            android:layout_marginTop="7dp"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
@@ -160,6 +193,8 @@
         android:textSize="16sp"
         android:textStyle="bold"
         android:textAlignment="center"
+        android:letterSpacing="0.05"
+        android:lineSpacingExtra="4dp"
         app:layout_constraintTop_toBottomOf="@id/calculateButton"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

@@ -33,7 +33,5 @@ class LoanCalculatorActivity : AppCompatActivity() {
             }
         }.attach()
 
-        
-
     }
 }

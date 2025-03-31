@@ -1,6 +1,9 @@
 package com.example.lon
 
+import android.icu.text.NumberFormat
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -47,6 +50,40 @@ class SavingsCalculatorFragment : Fragment() {
         calculateButton = binding.findViewById(R.id.calculateButton)
         resultText = binding.findViewById(R.id.resultText)
         taxationLayout = binding.findViewById(R.id.taxationLayout)
+
+        // TextWatcher로 실시간으로 쉼표 추가
+        monthlyDepositInput.addTextChangedListener(object : TextWatcher {
+            private var isFormatting = false // 무한 루프 방지 플래그
+
+            override fun beforeTextChanged(charSequence: CharSequence?, start: Int, count: Int, after: Int) {
+                // 텍스트 변경 전에는 아무 작업도 하지 않음
+            }
+
+            override fun onTextChanged(charSequence: CharSequence?, start: Int, before: Int, after: Int) {
+                // 텍스트가 변경될 때마다 실행되며, 아무 작업도 하지 않음
+            }
+
+            override fun afterTextChanged(editable: Editable?) {
+                if (isFormatting) return // 이미 텍스트를 수정 중이면 종료
+
+                val inputText = editable.toString().replace(",", "") // 기존의 쉼표 제거
+
+                if (inputText.isNotEmpty()) {
+                    try {
+                        isFormatting = true // 포맷팅 시작
+                        // 숫자를 쉼표로 구분하여 포맷
+                        val number = inputText.toLong() // Long 타입으로 변환
+                        val formattedText = NumberFormat.getInstance().format(number)
+                        monthlyDepositInput.setText(formattedText)
+                        monthlyDepositInput.setSelection(formattedText.length) // 커서를 텍스트의 끝으로 설정
+                    } catch (e: NumberFormatException) {
+                        e.printStackTrace() // 숫자 포맷 에러 처리
+                    } finally {
+                        isFormatting = false // 포맷팅 종료
+                    }
+                }
+            }
+        })
 
         // Year/Month Toggle Button
         yearMonthToggle.setOnClickListener {
