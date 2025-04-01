@@ -47,6 +47,9 @@ android {
 }
 
 dependencies {
+    // github
+    implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
+
     // 뷰페이퍼2
     implementation("androidx.viewpager2:viewpager2:1.1.0")
     // 마테리얼3

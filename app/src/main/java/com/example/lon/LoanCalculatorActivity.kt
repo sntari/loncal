@@ -29,7 +29,6 @@ class LoanCalculatorActivity : AppCompatActivity() {
                 0 -> tab.text = "대출 계산"
                 1 -> tab.text = "대출 비교"
                 2 -> tab.text = "적금 계산"
-                3 -> tab.text = "대출 현황"
             }
         }.attach()
 

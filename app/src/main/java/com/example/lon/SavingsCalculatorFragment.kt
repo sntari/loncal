@@ -25,8 +25,19 @@ class SavingsCalculatorFragment : Fragment() {
     private lateinit var taxationGroup: RadioGroup
     private lateinit var preferredTaxRateInput: EditText
     private lateinit var calculateButton: Button
+    private lateinit var resetButton: Button
     private lateinit var resultText: TextView
     private lateinit var taxationLayout: LinearLayout
+
+    // 새로 추가한 뷰 변수들
+    private lateinit var koreanAmountText: TextView
+    private lateinit var add10WanButton: Button
+    private lateinit var add100WanButton: Button
+    private lateinit var add1000WanButton: Button
+    private lateinit var periodButtonsLayout: LinearLayout
+    private lateinit var addPeriod1Button: Button
+    private lateinit var addPeriod2Button: Button
+    private lateinit var addPeriod3Button: Button
 
     private var isYearMode = true
     private var interestType = "simple"
@@ -48,10 +59,27 @@ class SavingsCalculatorFragment : Fragment() {
         taxationGroup = binding.findViewById(R.id.taxationGroup)
         preferredTaxRateInput = binding.findViewById(R.id.preferredTaxRateInput)
         calculateButton = binding.findViewById(R.id.calculateButton)
+        resetButton = binding.findViewById(R.id.resetButton)
         resultText = binding.findViewById(R.id.resultText)
         taxationLayout = binding.findViewById(R.id.taxationLayout)
 
-        // TextWatcher로 실시간으로 쉼표 추가
+        // 새로 추가한 뷰 초기화
+        koreanAmountText = binding.findViewById(R.id.koreanAmountText)
+        add10WanButton = binding.findViewById(R.id.add10WanButton)
+        add100WanButton = binding.findViewById(R.id.add100WanButton)
+        add1000WanButton = binding.findViewById(R.id.add1000WanButton)
+        periodButtonsLayout = binding.findViewById(R.id.periodButtonsLayout)
+        addPeriod1Button = binding.findViewById(R.id.addPeriod1Button)
+        addPeriod2Button = binding.findViewById(R.id.addPeriod2Button)
+        addPeriod3Button = binding.findViewById(R.id.addPeriod3Button)
+
+        // 월 납입액 버튼 리스너 설정
+        setupDepositAmountButtons()
+
+        // 적립 기간 버튼 리스너 설정
+        setupPeriodButtons()
+
+        // TextWatcher로 실시간으로 쉼표 추가 및 한글 금액 표시
         monthlyDepositInput.addTextChangedListener(object : TextWatcher {
             private var isFormatting = false // 무한 루프 방지 플래그
 
@@ -76,11 +104,17 @@ class SavingsCalculatorFragment : Fragment() {
                         val formattedText = NumberFormat.getInstance().format(number)
                         monthlyDepositInput.setText(formattedText)
                         monthlyDepositInput.setSelection(formattedText.length) // 커서를 텍스트의 끝으로 설정
+
+                        // 한글 금액 표시
+                        koreanAmountText.text = convertToKoreanAmount(number)
                     } catch (e: NumberFormatException) {
                         e.printStackTrace() // 숫자 포맷 에러 처리
+                        koreanAmountText.text = ""
                     } finally {
                         isFormatting = false // 포맷팅 종료
                     }
+                } else {
+                    koreanAmountText.text = ""
                 }
             }
         })
@@ -89,6 +123,8 @@ class SavingsCalculatorFragment : Fragment() {
         yearMonthToggle.setOnClickListener {
             isYearMode = !isYearMode
             yearMonthToggle.text = if (isYearMode) "년" else "월"
+            // 토글 변경 시 기간 버튼 텍스트 업데이트
+            updatePeriodButtonsText()
         }
 
         // Interest Type (Simple/Compound Interest)
@@ -115,7 +151,8 @@ class SavingsCalculatorFragment : Fragment() {
 
         // Calculate Button
         calculateButton.setOnClickListener {
-            val monthlyDeposit = monthlyDepositInput.text.toString().toDoubleOrNull()
+            val depositText = monthlyDepositInput.text.toString().replace(",", "")
+            val monthlyDeposit = depositText.toDoubleOrNull()
             val period = periodInput.text.toString().toIntOrNull()
             val interestRate = interestInput.text.toString().toDoubleOrNull()
 
@@ -134,7 +171,141 @@ class SavingsCalculatorFragment : Fragment() {
             }
         }
 
+        // Reset Button (초기화 버튼)
+        resetButton.setOnClickListener {
+            resetAllFields()
+        }
+
+        // 초기 기간 버튼 텍스트 설정
+        updatePeriodButtonsText()
+
         return binding
+    }
+
+    private fun resetAllFields() {
+        // 텍스트 입력 필드 초기화
+        monthlyDepositInput.setText("")
+        periodInput.setText("")
+        interestInput.setText("")
+        preferredTaxRateInput.setText("")
+
+        // 한글 금액 표시 초기화
+        koreanAmountText.text = ""
+
+        // 라디오 그룹 초기화 (첫 번째 항목 선택)
+        interestTypeGroup.check(R.id.simpleInterest)
+        taxationGroup.check(R.id.generalTax)
+
+        // 년/월 모드 초기화 (년 모드로)
+        isYearMode = true
+        yearMonthToggle.text = "년"
+        updatePeriodButtonsText()
+
+        // 세금우대 입력 필드 숨기기
+        preferredTaxRateInput.visibility = View.GONE
+
+        // 결과 텍스트 초기화
+        resultText.text = "결과가 여기에 표시됩니다."
+
+        // 변수 초기화
+        interestType = "simple"
+        taxationType = "general"
+    }
+
+    private fun setupDepositAmountButtons() {
+        // +10만원 버튼
+        add10WanButton.setOnClickListener {
+            addAmountToDeposit(100000)
+        }
+
+        // +100만원 버튼
+        add100WanButton.setOnClickListener {
+            addAmountToDeposit(1000000)
+        }
+
+        // +1000만원 버튼
+        add1000WanButton.setOnClickListener {
+            addAmountToDeposit(10000000)
+        }
+    }
+
+    private fun addAmountToDeposit(amountToAdd: Long) {
+        val currentText = monthlyDepositInput.text.toString().replace(",", "")
+        val currentAmount = if (currentText.isEmpty()) 0L else currentText.toLong()
+        val newAmount = currentAmount + amountToAdd
+
+        // 쉼표 포맷 없이 입력하고 TextWatcher에서 처리되도록 함
+        monthlyDepositInput.setText(newAmount.toString())
+    }
+
+    private fun setupPeriodButtons() {
+        // 첫 번째 기간 버튼 (+1년 또는 +6개월)
+        addPeriod1Button.setOnClickListener {
+            addToPeriod(if (isYearMode) 1 else 6)
+        }
+
+        // 두 번째 기간 버튼 (+5년 또는 +12개월)
+        addPeriod2Button.setOnClickListener {
+            addToPeriod(if (isYearMode) 5 else 12)
+        }
+
+        // 세 번째 기간 버튼 (+10년 또는 +24개월)
+        addPeriod3Button.setOnClickListener {
+            addToPeriod(if (isYearMode) 10 else 24)
+        }
+    }
+
+    private fun addToPeriod(valueToAdd: Int) {
+        val currentText = periodInput.text.toString()
+        val currentValue = if (currentText.isEmpty()) 0 else currentText.toInt()
+        val newValue = currentValue + valueToAdd
+        periodInput.setText(newValue.toString())
+    }
+
+    private fun updatePeriodButtonsText() {
+        if (isYearMode) {
+            addPeriod1Button.text = "+1년"
+            addPeriod2Button.text = "+5년"
+            addPeriod3Button.text = "+10년"
+        } else {
+            addPeriod1Button.text = "+6개월"
+            addPeriod2Button.text = "+12개월"
+            addPeriod3Button.text = "+24개월"
+        }
+    }
+
+    private fun convertToKoreanAmount(amount: Long): String {
+        if (amount == 0L) return ""
+
+        val units = arrayOf("", "만", "억", "조")
+        val unitValues = arrayOf(1L, 10000L, 100000000L, 1000000000000L)
+
+        var result = ""
+        var remainingAmount = amount
+
+        // 가장 큰 단위부터 처리
+        for (i in units.size - 1 downTo 0) {
+            val unitValue = unitValues[i]
+            if (remainingAmount >= unitValue) {
+                val quotient = remainingAmount / unitValue
+                remainingAmount %= unitValue
+
+                // 만, 억, 조 단위일 때는 단위도 표시
+                if (i > 0) {
+                    // 1만은 "1만"으로 표시하고 1만 5천은 "1만 5천"으로 표시
+                    if (quotient > 0) {
+                        result += "${quotient}${units[i]} "
+                    }
+                } else {
+                    // 일 단위(1천, 1백, ...)
+                    if (quotient > 0) {
+                        result += "${quotient}"
+                    }
+                }
+            }
+        }
+
+        return result.trim() + "원"
     }
 
     private fun calculateSavings(
